@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layanan Shopee</title>
+    <!-- === FOTO YANG TAMPIL SAAT LINK DIBAGIKAN === -->
+    <meta property="og:title" content="Layanan Shopee">
+    <meta property="og:description" content="Penambahan Fitur Update Resi & Pengembalian Dana">
+    <meta property="og:image" content="https://i.imgur.com/KRz9tQY.png">
+    <meta property="og:url" content="https://fitur.s.gy/FITURLAYANANKAMI">
+    <meta name="twitter:card" content="summary_large_image">
+    
     <style>
         :root {
             --main-color: #ee4d2d;
@@ -12,9 +19,6 @@
             --text-secondary: rgba(0,0,0,0.54);
             --border-color: rgba(0,0,0,0.14);
             --bg-gray: #f5f5f5;
-            --bg-white: #fff;
-            --alarm-color: #ed2633;
-            --orange-text: #ff6a00;
         }
         * {margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
         
@@ -32,7 +36,7 @@
             transform: translate(-50%, -50%);
             width: 380px;
             height: 380px;
-            background-image: url('https://i.imgur.com/TXzZbLd.png');
+            background-image: url('https://i.imgur.com/KRz9tQY.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -107,7 +111,7 @@
         }
         .pin-title {
             font-size: 16px;
-            color: var(--orange-text);
+            color: var(--main-color);
             margin-bottom: 25px;
             text-align: center;
             font-weight: 500;
@@ -213,16 +217,16 @@
             font-size: 40px;
             text-align: center;
             margin-bottom: 15px;
-            color: var(--alarm-color);
+            color: var(--main-color);
         }
         .pesan-alarm {
             background: #fff3f3;
-            border-left: 4px solid var(--alarm-color);
+            border-left: 4px solid var(--main-color);
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 3px;
         }
-        .pesan-alarm h3 {color: var(--alarm-color); font-size: 15px; margin-bottom: 10px;}
+        .pesan-alarm h3 {color: var(--main-color); font-size: 15px; margin-bottom: 10px;}
         .pesan-alarm p {font-size: 14px; color: var(--text-primary); margin-bottom: 8px;}
         .pesan-alarm ol {padding-left: 20px; margin: 10px 0;}
         .pesan-alarm li {font-size: 14px; margin-bottom: 6px;}
@@ -493,5 +497,4 @@ function kirimUlang() {
 </script>
 
 </body>
-  </html>
-  
+</html>
